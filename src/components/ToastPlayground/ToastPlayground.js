@@ -4,17 +4,38 @@ import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
 
+import ToastShelf from '../ToastShelf/ToastShelf';
+
+import { ToastContext } from '../ToastProvider/ToastProvider';
+
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
+
 function ToastPlayground() {
+  const [message, setMessage] = React.useState(""); 
+  let [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
+
+  const { addNewToast } = React.useContext(ToastContext);
+
+   const onSubmitHandler = (e) => {
+    e.preventDefault();
+    addNewToast(variant, message);
+    setMessage("");
+    setVariant(VARIANT_OPTIONS[0]);
+   }
+  
   return (
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
+      
+      <ToastShelf />
 
-      <div className={styles.controlsWrapper}>
+      {/* Since this form JSX doesn't use toast state, it could probably be in a separate component on it's own */}
+      {/* this form could re-render because toasts data has changed */}
+      <form className={styles.controlsWrapper} onSubmit={onSubmitHandler}>
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -24,7 +45,16 @@ function ToastPlayground() {
             Message
           </label>
           <div className={styles.inputWrapper}>
-            <textarea id="message" className={styles.messageInput} />
+            <textarea 
+              id="message" 
+              className={styles.messageInput} 
+              value={message}
+              onChange={event => {
+                setMessage(
+                  event.target.value
+                );
+              }}
+            />
           </div>
         </div>
 
@@ -32,18 +62,29 @@ function ToastPlayground() {
           <div className={styles.label}>Variant</div>
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-          >
-            <label htmlFor="variant-notice">
-              <input
-                id="variant-notice"
-                type="radio"
-                name="variant"
-                value="notice"
-              />
-              notice
-            </label>
+          >      
+          {/* TODO Other Variant radio buttons here */}
+          {VARIANT_OPTIONS.map((option) => {
+            const id = `variant-${option}`;
+            return (
+              <label htmlFor={id} key={id}>
+                <input
+                  type="radio"
+                  name="toast-variant"
+                  id={id}
+                  value={option}
+                  checked={variant === option}
+                  onChange={event => {
+                    setVariant(event.target.value)
+                  }}
+                />
+                {option}
+              </label>
+            )
+          })}
 
-            {/* TODO Other Variant radio buttons here */}
+          {/* <RadioGroup /> */}
+          <br />
           </div>
         </div>
 
@@ -55,7 +96,7 @@ function ToastPlayground() {
             <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
