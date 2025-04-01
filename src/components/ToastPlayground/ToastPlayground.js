@@ -26,7 +26,7 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [mostRecentToasts, setMostRecentToasts] = React.useState([]);
 
-  function popToast() {
+  function createToast() {
     let nextMostRecentToasts = [...mostRecentToasts];
 
     if (nextMostRecentToasts.length === 5) {
@@ -112,7 +112,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={popToast}>Pop Toast!</Button>
+            <Button onClick={createToast}>Pop Toast!</Button>
           </div>
         </div>
       </div>
