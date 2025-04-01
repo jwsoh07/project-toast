@@ -9,6 +9,23 @@ const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 function ToastPlayground() {
   const [selectedVariant, setSelectedVariant] = React.useState(null);
   const [message, setMessage] = React.useState("");
+  const [mostRecentToasts, setMostRecentToasts] = React.useState([]);
+
+  function popToast() {
+    let nextMostRecentToasts = [...mostRecentToasts];
+
+    if (nextMostRecentToasts.length === 5) {
+      nextMostRecentToasts.shift();
+    }
+
+    nextMostRecentToasts.push({
+      id: crypto.randomUUID(),
+      variant: selectedVariant,
+      message: message,
+    });
+
+    setMostRecentToasts(nextMostRecentToasts);
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -68,7 +85,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button>Pop Toast!</Button>
+            <Button onClick={popToast}>Pop Toast!</Button>
           </div>
         </div>
       </div>
