@@ -29,6 +29,16 @@ function ToastPlayground() {
     setMostRecentToasts(nextMostRecentToasts);
   }
 
+  function handleRemoveToast(id) {
+    let nextMostRecentToasts = [...mostRecentToasts];
+
+    nextMostRecentToasts = nextMostRecentToasts.filter(
+      (toast) => toast.id !== id
+    );
+
+    setMostRecentToasts(nextMostRecentToasts);
+  }
+
   return (
     <div className={styles.wrapper}>
       <header>
@@ -92,7 +102,10 @@ function ToastPlayground() {
         </div>
       </div>
 
-      <ToastShelf toasts={mostRecentToasts} />
+      <ToastShelf
+        toasts={mostRecentToasts}
+        handleRemoveToast={handleRemoveToast}
+      />
     </div>
   );
 }
