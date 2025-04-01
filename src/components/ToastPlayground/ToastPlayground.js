@@ -8,6 +8,19 @@ import styles from "./ToastPlayground.module.css";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
+const useEscapeKey = (callback) => {
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        callback();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [callback]);
+};
+
 function ToastPlayground() {
   const [selectedVariant, setSelectedVariant] = React.useState(null);
   const [message, setMessage] = React.useState("");
@@ -38,6 +51,8 @@ function ToastPlayground() {
 
     setMostRecentToasts(nextMostRecentToasts);
   }
+
+  useEscapeKey(() => setMostRecentToasts([]));
 
   return (
     <div className={styles.wrapper}>
